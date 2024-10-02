@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { MoveRightIcon } from "lucide-react";
 import { useSideBar } from "@/providers/SideBarContext/SideBarContext";
+import { PAGES_HEADER } from "../../data/pages";
 
 export default function Header() {
   const { toggleSideBar } = useSideBar();
@@ -25,14 +26,15 @@ export default function Header() {
       </Button>
       <div className="flex flex-wrap gap-2 justify-self-end">
         <Button asChild variant="default" className="rounded-2xl bg-blue-600">
-          <Link href="/register">Регистрация</Link>
+          <Link href={`/${PAGES_HEADER[0].path}`}>{PAGES_HEADER[0].name}</Link>
         </Button>
         <Button asChild variant="secondary" className="rounded-2xl text-white">
-          <Link href="/login">Вход</Link>
+          <Link href={`/${PAGES_HEADER[1].path}`}>{PAGES_HEADER[1].name}</Link>
         </Button>
         <Button asChild variant="outline" className="rounded-2xl">
-          <Link href="/about-us">
-            О нас <MoveRightIcon className="ml-1 size-2.5" />
+          <Link href={`/${PAGES_HEADER[2].path}`}>
+            {PAGES_HEADER[2].name}
+            <MoveRightIcon className="ml-1 size-2.5" />
           </Link>
         </Button>
       </div>

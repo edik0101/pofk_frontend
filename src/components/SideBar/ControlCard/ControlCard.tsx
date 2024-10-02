@@ -6,95 +6,37 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "../../ui/accordion";
+import {
+  PAGES_REPORTS,
+  PAGES_DATA_INPUT,
+  PAGES_KNOWLEDGE,
+  PAGES_SETTINGS,
+} from "@/data/pages";
 
 const ACCORDION = [
   {
     value: "settings",
     name: "Настройки",
     icon: <Settings className="h-5 w-5" />,
-    links: [
-      {
-        name: "Настройки статей",
-        path: "articles-settings",
-      },
-      {
-        name: "Настройки прав доступа",
-        path: "access-settings",
-      },
-      {
-        name: "Настройки личного кабинета",
-        path: "personal-settings",
-      },
-    ],
+    links: PAGES_SETTINGS,
   },
   {
     value: "Data Input",
     name: "Внесение данных",
     icon: <NotebookPen className="size-4" />,
-    links: [
-      {
-        name: "Журнал операций",
-        path: "journal",
-      },
-      {
-        name: "Себестоимость",
-        path: "cost",
-      },
-      {
-        name: "Самовыкупы",
-        path: "self-purchase",
-      },
-      {
-        name: "Финансовый отчет ВБ",
-        path: "WB-financial-reports",
-      },
-    ],
+    links: PAGES_DATA_INPUT,
   },
   {
     value: "Reports",
     name: "Отчеты",
     icon: <Clipboard className="size-4" />,
-    links: [
-      {
-        name: "ДДС",
-        path: "dds",
-      },
-      {
-        name: "ОПиУ",
-        path: "opiu",
-      },
-      {
-        name: "АВС",
-        path: "abc",
-      },
-      {
-        name: "Остатки",
-        path: "balance",
-      },
-      {
-        name: "Отчет по заказам",
-        path: "order-report",
-      },
-      {
-        name: "Сверка",
-        path: "comparison",
-      },
-    ],
+    links: PAGES_REPORTS,
   },
   {
     value: "Knowledge Base",
     name: "База знаний",
     icon: <BookText className="size-4" />,
-    links: [
-      {
-        name: "Внесение данных",
-        path: "data-input",
-      },
-      {
-        name: "Отчеты",
-        path: "reports",
-      },
-    ],
+    links: PAGES_KNOWLEDGE,
   },
 ];
 

@@ -1,24 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import Link from "next/link";
-
-const LINKS = [
-  {
-    name: "Пользовательское соглашение",
-    href: "contract",
-  },
-  {
-    name: "Политика конфиденциальности",
-    href: "privacy",
-  },
-  {
-    name: "Юридическая информация",
-    href: "legal",
-  },
-  {
-    name: "Публичная оферта",
-    href: "offer",
-  },
-];
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { PAGES_CONTACT_CARD } from "@/data/pages";
 
 export default function ContactsCard() {
   return (
@@ -44,16 +26,18 @@ export default function ContactsCard() {
           </div>
         </div>
         <div className="flex-1 flex-wrap max-lg:flex sm:gap-4 lg:mt-6">
-          {LINKS.map((link, i) => (
+          {PAGES_CONTACT_CARD.map((page, i) => (
             <Link
-              key={link.href}
-              href={`/${link.href}`}
+              key={page.path}
+              href={`/${page.path}`}
               prefetch={false}
               className={`block border-slate-500 py-2 ${
-                i === LINKS.length - 1 ? "border-b lg:border-b-0" : "border-b"
+                i === PAGES_CONTACT_CARD.length - 1
+                  ? "border-b lg:border-b-0"
+                  : "border-b"
               } w-full text-slate-500 hover:text-white`}
             >
-              {link.name}
+              {page.name}
             </Link>
           ))}
         </div>
