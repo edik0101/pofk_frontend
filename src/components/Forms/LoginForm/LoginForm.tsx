@@ -42,7 +42,7 @@ export default function LoginForm() {
   return (
     <Form {...form}>
       <form
-        className="mt-2 flex flex-col items-center gap-[13px] rounded-3xl bg-white py-[68px]"
+        className="mt-10 flex flex-col items-center gap-[13px] rounded-3xl bg-white py-[68px]"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
