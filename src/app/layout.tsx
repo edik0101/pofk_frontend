@@ -29,7 +29,7 @@ export default function RootLayout({
           <SideBar />
           <div className="w-full px-5 py-6">
             <Header />
-            {children}
+            <main>{children}</main>
           </div>
         </SideBarProvider>
       </body>
