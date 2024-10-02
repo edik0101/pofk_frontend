@@ -117,11 +117,11 @@ function SortableRow({
         ref={setNodeRef}
         style={style}
         {...attributes}
-        {...listeners}
         className={`cursor-move ${isDragging ? "opacity-50" : ""} ${level > 0 ? "bg-blue-200" : ""}`}
       >
         <TableCell
           className={`${item.children ? "text-blue-500" : ""} ${level > 0 ? "pl-8" : ""}`}
+          {...listeners}
         >
           <div className="flex items-center">
             <Button variant="ghost" size="icon" className="mr-2">
@@ -130,17 +130,25 @@ function SortableRow({
             <span>{item.name}</span>
           </div>
         </TableCell>
-        <TableCell>{item.activityType}</TableCell>
-        <TableCell>{item.description}</TableCell>
+        <TableCell {...listeners}>{item.activityType}</TableCell>
+        <TableCell {...listeners}>{item.description}</TableCell>
         <TableCell>
-          <Button variant="ghost" size="icon" onClick={() => onRemove(item.id)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation();
+              e.preventDefault();
+              console.log(e, item.id);
+              onRemove(item.id);
+            }}
+          >
             <X className="h-4 w-4" />
           </Button>
         </TableCell>
       </TableRow>
       {item.children && (
         <ChildrenRows
-          parentId={item.id}
           children={item.children}
           onRemove={onRemove}
           level={level + 1}
@@ -155,48 +163,38 @@ function ChildrenRows({
   onRemove,
   level,
 }: {
-  parentId: string;
   children: Item[];
   onRemove: (id: string) => void;
   level: number;
 }) {
-  const [childItems, setChildItems] = useState(children);
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (active.id !== over?.id) {
-      setChildItems((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over?.id);
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
-  };
-
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <SortableContext
-        items={childItems.map((child) => child.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        {childItems.map((child) => (
-          <SortableRow
-            key={child.id}
-            item={child}
-            onRemove={onRemove}
-            level={level}
-          />
-        ))}
-      </SortableContext>
-    </DndContext>
+    <SortableContext
+      items={children.map((child) => child.id)}
+      strategy={verticalListSortingStrategy}
+    >
+      {children.map((child) => (
+        <SortableRow
+          key={child.id}
+          item={child}
+          onRemove={onRemove}
+          level={level}
+        />
+      ))}
+    </SortableContext>
   );
 }
 
-function DraggingRow({ item }: { item: Item }) {
+function DraggingRow({ item, level = 0 }: { item: Item; level?: number }) {
   return (
-    <TableRow className="bg-muted">
-      <TableCell>{item.name}</TableCell>
+    <TableRow className="bg-muted shadow-md">
+      <TableCell className={`${level > 0 ? "pl-8" : ""}`}>
+        <div className="flex items-center">
+          <Button variant="ghost" size="icon" className="mr-2">
+            <GripVerticalIcon className="h-4" />
+          </Button>
+          <span>{item.name}</span>
+        </div>
+      </TableCell>
       <TableCell>{item.activityType}</TableCell>
       <TableCell>{item.description}</TableCell>
       <TableCell>
@@ -211,6 +209,7 @@ function DraggingRow({ item }: { item: Item }) {
 export default function NestedDraggableTable() {
   const [items, setItems] = useState(initialItems);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [activeLevel, setActiveLevel] = useState(0);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -220,24 +219,58 @@ export default function NestedDraggableTable() {
   );
 
   function handleDragStart(event: DragStartEvent) {
+    console.log(event);
+    const { active } = event;
     setActiveId(event.active.id);
+    setActiveLevel(getItemLevel(items, active.id as string));
   }
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
     if (active.id !== over?.id) {
-      setItems((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over?.id);
-        return arrayMove(items, oldIndex, newIndex);
+      setItems((prevItems) => {
+        if (activeLevel !== 0) {
+          const parentIndex = prevItems.findIndex(
+            (item) =>
+              item.children &&
+              item.children.find((child) => child.id === active.id),
+          );
+
+          if (parentIndex !== -1) {
+            const activeIndex = prevItems[parentIndex]!.children!.findIndex(
+              (child) => child.id === active.id,
+            );
+            const overIndex = prevItems[parentIndex]!.children!.findIndex(
+              (child) => child.id === over?.id,
+            );
+            const sortedParent = arrayMove(
+              prevItems[parentIndex]!.children ?? [],
+              activeIndex,
+              overIndex,
+            );
+            return prevItems.map((item, ind) =>
+              ind === parentIndex ? { ...item, children: sortedParent } : item,
+            );
+          }
+        } else {
+          const activeIndex = prevItems.findIndex(
+            (item) => item.id === active.id,
+          );
+          const overIndex = prevItems.findIndex((item) => item.id === over?.id);
+          if (activeIndex !== -1 && overIndex !== -1) {
+            return arrayMove(prevItems, activeIndex, overIndex);
+          }
+        }
+        return prevItems;
       });
     }
-
     setActiveId(null);
+    setActiveLevel(0);
   }
 
   const removeItem = (id: string) => {
+    console.log(id);
     setItems((items) => removeItemById(items, id));
   };
 
@@ -270,7 +303,10 @@ export default function NestedDraggableTable() {
       </Table>
       <DragOverlay>
         {activeId ? (
-          <DraggingRow item={findItemById(items, activeId as string)!} />
+          <DraggingRow
+            item={findItemById(items, activeId as string)!}
+            level={activeLevel}
+          />
         ) : null}
       </DragOverlay>
     </DndContext>
@@ -291,10 +327,27 @@ function removeItemById(items: Item[], id: string): Item[] {
   return items.reduce((acc: Item[], item) => {
     if (item.id !== id) {
       if (item.children) {
-        item = { ...item, children: removeItemById(item.children, id) };
+        const newChildren = removeItemById(item.children, id);
+        if (newChildren.length > 0) {
+          item = { ...item, children: newChildren };
+        } else {
+          item = { ...item };
+          delete item.children;
+        }
       }
       acc.push(item);
     }
     return acc;
   }, []);
+}
+
+function getItemLevel(items: Item[], id: string, level = 0): number {
+  for (const item of items) {
+    if (item.id === id) return level;
+    if (item.children) {
+      const childLevel = getItemLevel(item.children, id, level + 1);
+      if (childLevel !== -1) return childLevel;
+    }
+  }
+  return -1;
 }
