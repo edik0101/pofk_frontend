@@ -53,7 +53,7 @@ export default function SideBar() {
         <div className="flex w-full items-center justify-between">
           {!isCollapsed && (
             <p className="flex items-center text-lg">
-              <span className="block rounded-md bg-blue-600 p-1 leading-4">
+              <span className="block rounded-md bg-primary p-1 leading-4">
                 ФИН
               </span>
               <span className="block p-1">Контроль</span>
@@ -98,11 +98,11 @@ export default function SideBar() {
             />
             {!isCollapsed && (
               <p>
-                <Link href={"/login"} className="text-orange-500">
+                <Link href={"/login"} className="text-secondary">
                   Войдите
                 </Link>{" "}
                 или{" "}
-                <Link href={"/register"} className="text-blue-600">
+                <Link href={"/register"} className="text-primary">
                   зарегистрируйтесь
                 </Link>{" "}
                 чтобы начать работу

@@ -1,105 +1,135 @@
+export enum PagesPaths {
+  "register" = "register",
+  "login" = "login",
+  "about-us" = "about-us",
+  "reset-password" = "reset-password",
+  "user-agreement" = "user-agreement",
+  "privacy-policy" = "privacy-policy",
+  "legal-information" = "legal-information",
+  "public-offer" = "public-offer",
+  "articles-settings" = "articles-settings",
+  "access-settings" = "access-settings",
+  "personal-settings" = "personal-settings",
+  "journal" = "journal",
+  "cost" = "cost",
+  "self-purchase" = "self-purchase",
+  "WB-financial-reports" = "WB-financial-reports",
+  "dds" = "dds",
+  "opiu" = "opiu",
+  "abc" = "abc",
+  "balance" = "balance",
+  "order-report" = "order-report",
+  "comparison" = "comparison",
+  "data-input" = "data-input",
+  "reports" = "reports",
+}
+
 export const PAGES_CONTACT_CARD = [
   {
     name: "Пользовательское соглашение",
-    path: "user-agreement",
+    path: PagesPaths["user-agreement"],
   },
   {
     name: "Политика конфиденциальности",
-    path: "privacy-policy",
+    path: PagesPaths["privacy-policy"],
   },
   {
     name: "Юридическая информация",
-    path: "legal-information",
+    path: PagesPaths["legal-information"],
   },
   {
     name: "Публичная оферта",
-    path: "public-offer",
+    path: PagesPaths["public-offer"],
   },
 ];
 
 export const PAGES_SETTINGS = [
   {
     name: "Настройки статей",
-    path: "articles-settings",
+    path: PagesPaths["articles-settings"],
   },
   {
     name: "Настройки прав доступа",
-    path: "access-settings",
+    path: PagesPaths["access-settings"],
   },
   {
     name: "Настройки личного кабинета",
-    path: "personal-settings",
+    path: PagesPaths["personal-settings"],
   },
 ];
 
 export const PAGES_DATA_INPUT = [
   {
     name: "Журнал операций",
-    path: "journal",
+    path: PagesPaths["journal"],
   },
   {
     name: "Себестоимость",
-    path: "cost",
+    path: PagesPaths["cost"],
   },
   {
     name: "Самовыкупы",
-    path: "self-purchase",
+    path: PagesPaths["self-purchase"],
   },
   {
     name: "Финансовый отчет ВБ",
-    path: "WB-financial-reports",
+    path: PagesPaths["WB-financial-reports"],
   },
 ];
 
 export const PAGES_REPORTS = [
   {
     name: "ДДС",
-    path: "dds",
+    path: PagesPaths["dds"],
   },
   {
     name: "ОПиУ",
-    path: "opiu",
+    path: PagesPaths["opiu"],
   },
   {
     name: "АВС",
-    path: "abc",
+    path: PagesPaths["abc"],
   },
   {
     name: "Остатки",
-    path: "balance",
+    path: PagesPaths["balance"],
   },
   {
     name: "Отчет по заказам",
-    path: "order-report",
+    path: PagesPaths["order-report"],
   },
   {
     name: "Сверка",
-    path: "comparison",
+    path: PagesPaths["comparison"],
   },
 ];
 
 export const PAGES_KNOWLEDGE = [
   {
     name: "Внесение данных",
-    path: "data-input",
+    path: PagesPaths["data-input"],
   },
   {
     name: "Отчеты",
-    path: "reports",
+    path: PagesPaths["reports"],
   },
 ];
 
 export const PAGES_HEADER = [
   {
     name: "Регистрация",
-    path: "register",
+    path: PagesPaths["register"],
   },
   {
     name: "Вход",
-    path: "login",
+    path: PagesPaths["login"],
   },
   {
     name: "О нас",
-    path: "about-us",
+    path: PagesPaths["about-us"],
   },
 ];
+export const PAGE_RESET = {
+  name: "Сбросить пароль",
+  path: PagesPaths["reset-password"],
+};

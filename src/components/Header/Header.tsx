@@ -25,7 +25,7 @@ export default function Header() {
         />
       </Button>
       <div className="flex flex-wrap gap-2 justify-self-end">
-        <Button asChild variant="default" className="rounded-2xl bg-blue-600">
+        <Button asChild variant="default" className="rounded-2xl">
           <Link href={`/${PAGES_HEADER[0].path}`}>{PAGES_HEADER[0].name}</Link>
         </Button>
         <Button asChild variant="secondary" className="rounded-2xl text-white">
