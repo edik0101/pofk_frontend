@@ -25,18 +25,20 @@ export default function SimpleTable({
   columnsHeaders?: string[];
 }) {
   const columns: ColumnDef<Record<string, string | number | JSX.Element>>[] =
-    Object.keys(data[0]).map((key: string, i: number) => {
-      return {
-        accessorKey: key,
-        header: columnsHeaders ? columnsHeaders[i] : "",
-        cell: ({ row }) => {
-          const value = row.original[key];
-          return typeof value === "object" && React.isValidElement(value)
-            ? value
-            : String(value);
-        },
-      };
-    });
+    data.length
+      ? Object.keys(data[0]).map((key: string, i: number) => {
+          return {
+            accessorKey: key,
+            header: columnsHeaders ? columnsHeaders[i] : "",
+            cell: ({ row }) => {
+              const value = row.original[key];
+              return typeof value === "object" && React.isValidElement(value)
+                ? value
+                : String(value);
+            },
+          };
+        })
+      : [];
 
   const table = useReactTable({
     data,
@@ -66,21 +68,29 @@ export default function SimpleTable({
         </TableHeader>
       )}
       <TableBody className="">
-        {table.getRowModel().rows.map((row, i) => (
-          <TableRow
-            key={row.id}
-            className={`${i % 2 === 0 ? "bg-slate-50" : "bg-slate-100"} h-[71px] border-y-2 border-white`}
-          >
-            {row.getVisibleCells().map((cell, ind) => (
-              <TableCell
-                key={cell.id}
-                className={`${ind === 0 ? "rounded-l-xl pl-6" : ""} ${ind === row.getVisibleCells().length - 1 ? "rounded-r-xl" : ""}`}
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
+        {data.length ? (
+          table.getRowModel().rows.map((row, i) => (
+            <TableRow
+              key={row.id}
+              className={`${i % 2 === 0 ? "bg-slate-50" : "bg-slate-100"} h-[71px] border-y-2 border-white`}
+            >
+              {row.getVisibleCells().map((cell, ind) => (
+                <TableCell
+                  key={cell.id}
+                  className={`${ind === 0 ? "rounded-l-xl pl-6" : ""} ${ind === row.getVisibleCells().length - 1 ? "rounded-r-xl" : ""}`}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={columns.length} className="text-center">
+              Нет данных
+            </TableCell>
           </TableRow>
-        ))}
+        )}
       </TableBody>
     </Table>
   );

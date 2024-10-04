@@ -4,60 +4,14 @@ import Heading from "@/components/Heading/Heading";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
-
-enum ButtonsValues {
-  periodStart = "periodStart",
-  initialAccountBalances = "initialAccountBalances",
-  cashFlowCategories = "cashFlowCategories",
-  directionsList = "directionsList",
-  profitLossCategories = "profitLossCategories",
-  contractorList = "contractorList",
-  autoSettings = "autoSettings",
-  employeeList = "employeeList",
-}
-
-const BUTTONS = [
-  {
-    id: 1,
-    value: ButtonsValues.periodStart,
-    buttonName: "Начало периода",
-  },
-  {
-    id: 2,
-    value: ButtonsValues.initialAccountBalances,
-    buttonName: "Начальные остатки на счетах",
-  },
-  {
-    id: 3,
-    value: ButtonsValues.cashFlowCategories,
-    buttonName: "Список категорий ДДС",
-  },
-  {
-    id: 4,
-    value: ButtonsValues.directionsList,
-    buttonName: "Список направлений",
-  },
-  {
-    id: 5,
-    value: ButtonsValues.profitLossCategories,
-    buttonName: "Список категорий ОПиУ",
-  },
-  {
-    id: 6,
-    value: ButtonsValues.contractorList,
-    buttonName: "Список контрагентов",
-  },
-  {
-    id: 7,
-    value: ButtonsValues.autoSettings,
-    buttonName: "Автонастройки",
-  },
-  {
-    id: 8,
-    value: ButtonsValues.employeeList,
-    buttonName: "Список сотрудников",
-  },
-];
+import Section from "./Section/Section";
+import { BUTTONS, ButtonsValues } from "./data/buttons";
+import {
+  initialAccountBalances,
+  initialAccountBalancesColumns,
+} from "./data/tempData";
+import { Button } from "@/components/ui/button";
+import DatePickerForm from "./DatePickerForm/DatePickerForm";
 
 export default function ArticlesSettings() {
   const [activeButton, setActiveButton] = useState<ButtonsValues>(
@@ -96,52 +50,42 @@ export default function ArticlesSettings() {
       </RadioGroup>
       <div className="mt-12">
         {activeButton === ButtonsValues.periodStart && (
-          <>
-            <Heading text="-" headingLvl={3} />
-            <p>periodStart</p>
-          </>
+          <Section title="" data={[]} />
         )}
         {activeButton === ButtonsValues.initialAccountBalances && (
-          <>
-            <Heading text="Начальные остатки на счетах" headingLvl={3} />
-            <p>periodStart</p>
-          </>
+          <Section
+            title="Начальные остатки на счетах"
+            data={initialAccountBalances}
+            columnsHeaders={initialAccountBalancesColumns}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <DatePickerForm />
+              <Button
+                variant="outline"
+                className="h-12 rounded-3xl border border-black bg-transparent px-8 text-base"
+              >
+                Добавить остатки
+              </Button>
+            </div>
+          </Section>
         )}
         {activeButton === ButtonsValues.cashFlowCategories && (
-          <>
-            <Heading text="Список категорий ДДС" headingLvl={3} />
-            <p>periodStart</p>
-          </>
+          <Section title="Список категорий ДДС" data={[]} />
         )}
         {activeButton === ButtonsValues.directionsList && (
-          <>
-            <Heading text="Настройка направлений" headingLvl={3} />
-            <p>periodStart</p>
-          </>
+          <Section title="Настройка направлений" data={[]} />
         )}
         {activeButton === ButtonsValues.profitLossCategories && (
-          <>
-            <Heading text="-" headingLvl={3} />
-            <p>periodStart</p>
-          </>
+          <Section title="-" data={[]} />
         )}
         {activeButton === ButtonsValues.contractorList && (
-          <>
-            <Heading text="Список контрагентов" headingLvl={3} />
-            <p>periodStart</p>
-          </>
+          <Section title="Список контрагентов" data={[]} />
         )}
         {activeButton === ButtonsValues.employeeList && (
-          <>
-            <Heading text="Список сотрудников" headingLvl={3} />
-            <p>periodStart</p>
-          </>
+          <Section title="Список сотрудников" data={[]} />
         )}
         {activeButton === ButtonsValues.autoSettings && (
-          <>
-            <Heading text="Автонастройки" headingLvl={3} />
-            <p>periodStart</p>
-          </>
+          <Section title="Автонастройки" data={[]} />
         )}
       </div>
     </div>
