@@ -29,25 +29,28 @@ function useWindowSize() {
 }
 
 export default function SideBar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isAuth, setIsAuth] = useState(true);
-  const { isOpen, toggleSideBar } = useSideBar();
+  const { isOpen, toggleSideBar, isCollapsed, toggleCollapsed } = useSideBar();
   const width = useWindowSize();
 
   useEffect(() => {
     if (width < 1024) {
-      if (isCollapsed) setIsCollapsed(false);
+      if (isCollapsed) toggleCollapsed(false);
       if (isOpen) toggleSideBar();
     } else if (width >= 1024 && !isOpen) {
       toggleSideBar();
     }
   }, [width]);
 
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+  }, [isOpen]);
+
   return (
     <>
       <aside
-        className={`h-full min-h-screen ${
-          isCollapsed ? "w-min" : "max-w-[385px]"
+        className={`fixed h-full min-h-screen ${
+          isCollapsed ? "w-sideBarWidthCollapsed" : "w-sideBarWidth"
         } ${isOpen ? "max-lg:translate-x-0" : "max-lg:-translate-x-full"} transition-width z-30 mr-1 flex flex-col gap-2 bg-gray-900 p-3 pt-5 text-white duration-300 max-lg:absolute`}
       >
         <div className="flex w-full items-center justify-between">
@@ -60,7 +63,7 @@ export default function SideBar() {
             </p>
           )}
           <Button
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={() => toggleCollapsed(!isCollapsed)}
             variant="ghost"
             size="icon"
             className="m-2 hidden self-end bg-inherit p-2 hover:opacity-80 lg:block"
@@ -84,7 +87,7 @@ export default function SideBar() {
         {isAuth ? (
           <ControlCard
             isCollapsed={isCollapsed}
-            setIsCollapsed={setIsCollapsed}
+            setIsCollapsed={toggleCollapsed}
           />
         ) : (
           <div

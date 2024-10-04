@@ -21,19 +21,19 @@ const ACCORDION = [
     links: PAGES_SETTINGS,
   },
   {
-    value: "Data Input",
+    value: "data-input",
     name: "Внесение данных",
     icon: <NotebookPen className="size-4" />,
     links: PAGES_DATA_INPUT,
   },
   {
-    value: "Reports",
+    value: "reports",
     name: "Отчеты",
     icon: <Clipboard className="size-4" />,
     links: PAGES_REPORTS,
   },
   {
-    value: "Knowledge Base",
+    value: "knowledge-base",
     name: "База знаний",
     icon: <BookText className="size-4" />,
     links: PAGES_KNOWLEDGE,
@@ -70,7 +70,7 @@ export default function ControlCard({
               {el.links.map((link, i) => (
                 <Link
                   key={link.path}
-                  href={`/${link.path}`}
+                  href={`/${el.value}/${link.path}`}
                   prefetch={false}
                   className={`block border-slate-500 py-2 ${
                     i === el.links.length - 1
