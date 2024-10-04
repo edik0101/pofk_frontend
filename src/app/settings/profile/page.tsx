@@ -52,7 +52,9 @@ export default function Profile() {
         <Heading text="Личные данные" headingLvl={2} />
         <InstructionsButton />
       </div>
-      <Registration />
+      <Card className="bg-white p-4">
+        <Registration isProfile={true} />
+      </Card>
       <Heading text="Информация по тарифу" headingLvl={2} />
       <Card className="bg-white p-4">
         <SimpleTable data={TarifTableData} />
