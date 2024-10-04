@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -20,17 +21,22 @@ export default function SimpleTable({
   data,
   columnsHeaders,
 }: {
-  data: Record<string, string | number>[];
+  data: Record<string, string | number | JSX.Element>[];
   columnsHeaders?: string[];
 }) {
-  const columns: ColumnDef<Record<string, string | number>>[] = Object.keys(
-    data[0],
-  ).map((key: string, i: number) => {
-    return {
-      accessorKey: key,
-      header: columnsHeaders ? columnsHeaders[i] : "",
-    };
-  });
+  const columns: ColumnDef<Record<string, string | number | JSX.Element>>[] =
+    Object.keys(data[0]).map((key: string, i: number) => {
+      return {
+        accessorKey: key,
+        header: columnsHeaders ? columnsHeaders[i] : "",
+        cell: ({ row }) => {
+          const value = row.original[key];
+          return typeof value === "object" && React.isValidElement(value)
+            ? value
+            : String(value);
+        },
+      };
+    });
 
   const table = useReactTable({
     data,
@@ -68,7 +74,7 @@ export default function SimpleTable({
             {row.getVisibleCells().map((cell, ind) => (
               <TableCell
                 key={cell.id}
-                className={`${ind === 0 ? "rounded-l-xl pl-6" : ""} ${ind === row.getVisibleCells().length - 1 ? "rounded-r-xl pr-6" : ""}`}
+                className={`${ind === 0 ? "rounded-l-xl pl-6" : ""} ${ind === row.getVisibleCells().length - 1 ? "rounded-r-xl" : ""}`}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
