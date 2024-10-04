@@ -345,7 +345,7 @@ export default function Registration({ isProfile }: { isProfile?: boolean }) {
               form.formState.isSubmitting ||
               !form.formState.isValid
             }
-            className="h-14 rounded-3xl px-8 text-white"
+            className="mt-6 h-14 rounded-3xl px-8 text-white"
           >
             {isProfile ? "Сохранить изменения" : "Зарегистрироваться и войти"}
           </Button>

@@ -75,13 +75,13 @@ export default function Profile() {
         <Heading text="Личные данные" headingLvl={2} />
         <InstructionsButton />
       </div>
-      <Card className="bg-white p-4">
+      <Card className="rounded-3xl bg-white p-4">
         <Registration isProfile={true} />
       </Card>
       <Heading text="Информация по тарифу" headingLvl={2} />
-      <Card className="bg-white p-4">
+      <Card className="rounded-3xl bg-white p-4">
         <SimpleTable data={TarifTableData} />
-        <div className="mt-5 flex items-center justify-between">
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
           <Button variant="default" className="h-12 rounded-3xl px-8 text-base">
             Поменять тариф
           </Button>
@@ -95,7 +95,7 @@ export default function Profile() {
           </Link>
         </div>
       </Card>
-      <div className="flex items-baseline justify-between">
+      <div className="flex flex-wrap items-baseline justify-between gap-4">
         <Heading text="Подключенные сотрудники" headingLvl={2} />
         <Button
           variant="outline"
@@ -104,7 +104,7 @@ export default function Profile() {
           <PlusIcon className="mr-2" /> Добавить сотрудника
         </Button>
       </div>
-      <Card className="bg-white p-4">
+      <Card className="mt-5 rounded-3xl bg-white p-4">
         <SimpleTable data={EmployeeList} columnsHeaders={EmployeeListColumns} />
       </Card>
     </div>
