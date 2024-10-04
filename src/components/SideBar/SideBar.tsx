@@ -43,7 +43,7 @@ export default function SideBar() {
   }, [width]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "auto";
+    document.body.style.overflow = isOpen && width < 1024 ? "hidden" : "auto";
   }, [isOpen]);
 
   return (
