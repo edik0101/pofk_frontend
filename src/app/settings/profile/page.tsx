@@ -1,5 +1,5 @@
 import InstructionsButton from "@/components/Buttons/Instructions/Instructions";
-import Registration from "@/components/Forms/Registration/Registration";
+import ProfileForm from "@/components/Forms/ProfileForm/ProfileForm";
 import Heading from "@/components/Heading/Heading";
 import SimpleTable from "@/components/Tables/SimpleTable/SimpleTable";
 import { Button } from "@/components/ui/button";
@@ -76,7 +76,7 @@ export default function Profile() {
         <InstructionsButton />
       </div>
       <Card className="rounded-3xl bg-white p-4">
-        <Registration isProfile={true} />
+        <ProfileForm />
       </Card>
       <Heading text="Информация по тарифу" headingLvl={2} />
       <Card className="rounded-3xl bg-white p-4">

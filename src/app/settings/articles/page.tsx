@@ -26,7 +26,7 @@ export default function ArticlesSettings() {
     <div>
       <Heading text="Настройка статей" />
       <RadioGroup
-        defaultValue={ButtonsValues.periodStart}
+        defaultValue={ButtonsValues.initialAccountBalances}
         onValueChange={handleButtonClick}
         className="flex flex-wrap items-center gap-2.5"
       >
@@ -49,9 +49,6 @@ export default function ArticlesSettings() {
         ))}
       </RadioGroup>
       <div className="mt-12">
-        {activeButton === ButtonsValues.periodStart && (
-          <Section title="" data={[]} />
-        )}
         {activeButton === ButtonsValues.initialAccountBalances && (
           <Section
             title="Начальные остатки на счетах"
@@ -80,9 +77,6 @@ export default function ArticlesSettings() {
         )}
         {activeButton === ButtonsValues.contractorList && (
           <Section title="Список контрагентов" data={[]} />
-        )}
-        {activeButton === ButtonsValues.employeeList && (
-          <Section title="Список сотрудников" data={[]} />
         )}
         {activeButton === ButtonsValues.autoSettings && (
           <Section title="Автонастройки" data={[]} />

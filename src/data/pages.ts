@@ -53,7 +53,7 @@ export const PAGES_SETTINGS = [
     path: PagesPaths["access-settings"],
   },
   {
-    name: "Настройки личного кабинета",
+    name: "Профиль",
     path: PagesPaths["personal-settings"],
   },
 ];
