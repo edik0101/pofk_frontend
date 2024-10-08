@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import SideBar from "@/components/SideBar/SideBar";
 import Header from "@/components/Header/Header";
+import { Toaster } from "@/components/ui/sonner";
 import { SideBarProvider } from "@/providers/SideBarContext/SideBarContext";
 import MainContainer from "@/components/MainContainer/MainContainer";
 
@@ -35,6 +36,7 @@ export default function RootLayout({
               <main>{children}</main>
             </React.Fragment>
           </MainContainer>
+          <Toaster position="bottom-right" />
         </SideBarProvider>
       </body>
     </html>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -18,14 +19,32 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  email: z.string().email("Адрес электронной почты введён некорректно"),
-  password: z.string(),
+  email: z.string().trim().email("Адрес электронной почты введён некорректно"),
+  password: z
+    .string()
+    .trim()
+    .min(6, "Минимальная длина пароля 6 символов")
+    .max(20, "Максимальная длина пароля 20 символов")
+    .refine((value) => /[a-z]/.test(value), {
+      message: "Пароль должен содержать хотя бы одну строчную букву",
+    })
+    .refine((value) => /[A-Z]/.test(value), {
+      message: "Пароль должен содержать хотя бы одну заглавную букву",
+    })
+    .refine((value) => /\d/.test(value), {
+      message: "Пароль должен содержать хотя бы одну цифру",
+    })
+    .refine((value) => /[!@#$%^&*()_+[\]{};':",.<>?\\\/]/.test(value), {
+      message: "Пароль должен содержать хотя бы один спецсимвол",
+    }),
 });
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,8 +54,30 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.success) {
+        router.push("/profile");
+        form.reset();
+      } else {
+        console.error("Login failed: ", data.message);
+        toast.error("Ошибка логина: ", { description: data.message });
+      }
+    } catch (error: unknown) {
+      console.error(error instanceof Error ? error.message : "Unknown error");
+      toast.error("Ошибка логина");
+    }
   };
 
   return (
@@ -50,8 +91,8 @@ export default function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <div className="flex items-baseline gap-6 rounded-2xl border p-[3px] pl-3.5">
-                <FormLabel className="text-base">Почта</FormLabel>
+              <div className="flex w-80 items-baseline gap-6 rounded-2xl border p-[3px] max-sm:flex-wrap">
+                <FormLabel className="pl-3.5 text-base">Почта</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="example@mail.ru"
@@ -70,32 +111,35 @@ export default function LoginForm() {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="relative flex items-baseline gap-6 rounded-2xl border p-[3px] pl-3.5">
-              <FormLabel className="text-base">Пароль</FormLabel>
-              <FormControl>
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="*****"
-                  required
-                  className="mt-0 rounded-2xl border-none bg-gray-100 px-5 py-4 text-base text-gray-800"
-                  style={{ marginTop: "0" }}
-                  {...field}
-                />
-              </FormControl>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute -top-1.5 right-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? (
-                  <EyeOffIcon className="h-4 w-4 text-gray-500" />
-                ) : (
-                  <EyeIcon className="h-4 w-4 text-gray-500" />
-                )}
-              </Button>
+            <FormItem>
+              <div className="relative flex w-80 items-baseline gap-6 rounded-2xl border p-[3px] max-sm:flex-wrap">
+                <FormLabel className="pl-3.5 text-base">Пароль</FormLabel>
+                <FormControl>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="*****"
+                    required
+                    className="mt-0 rounded-2xl border-none bg-gray-100 px-5 py-4 text-base text-gray-800"
+                    style={{ marginTop: "0" }}
+                    {...field}
+                  />
+                </FormControl>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-0 top-6 h-full px-2 py-1.5 hover:bg-transparent sm:-top-0.5"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOffIcon className="h-6 w-6 text-gray-500" />
+                  ) : (
+                    <EyeIcon className="h-6 w-6 text-gray-500" />
+                  )}
+                </Button>
+              </div>
+              <FormMessage className="max-w-80 text-wrap" />
             </FormItem>
           )}
         />
