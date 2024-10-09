@@ -8,8 +8,8 @@ export enum PagesPaths {
   "legal-information" = "legal-information",
   "public-offer" = "public-offer",
   "articles-settings" = "articles",
-  "access-settings" = "access",
   "personal-settings" = "profile",
+  "users" = "users",
   "journal" = "journal",
   "cost" = "cost",
   "self-purchase" = "self-purchase",
@@ -45,19 +45,16 @@ export const PAGES_CONTACT_CARD = [
 
 export const PAGES_SETTINGS = [
   {
-    name: "Настройки статей",
-    path: PagesPaths["articles-settings"],
-  },
-  {
-    name: "Настройки прав доступа",
-    path: PagesPaths["access-settings"],
-  },
-];
-
-export const PAGES_PROFILE = [
-  {
     name: "Профиль",
     path: PagesPaths["personal-settings"],
+  },
+  {
+    name: "Пользователи",
+    path: PagesPaths["users"],
+  },
+  {
+    name: "Статьи",
+    path: PagesPaths["articles-settings"],
   },
 ];
 

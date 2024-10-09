@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Settings, NotebookPen, Clipboard, BookText, User } from "lucide-react";
+import { Settings, NotebookPen, Clipboard, BookText } from "lucide-react";
 import {
   Accordion,
   AccordionItem,
@@ -11,7 +11,6 @@ import {
   PAGES_DATA_INPUT,
   PAGES_KNOWLEDGE,
   PAGES_SETTINGS,
-  PAGES_PROFILE,
 } from "@/data/pages";
 
 const ACCORDION = [
@@ -54,14 +53,6 @@ export default function ControlCard({
       collapsible
       className="w-full justify-between gap-4 rounded-md border-b-0"
     >
-      <Link
-        href={PAGES_PROFILE[0].path}
-        prefetch={false}
-        className="flex items-center gap-2 px-3 py-4 hover:underline"
-      >
-        <User className="size-4" />
-        Профиль
-      </Link>
       {ACCORDION.map((el) => (
         <AccordionItem
           key={el.value}

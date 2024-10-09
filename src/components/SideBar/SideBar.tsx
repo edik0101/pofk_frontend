@@ -49,7 +49,7 @@ export default function SideBar() {
   return (
     <>
       <aside
-        className={`fixed h-full min-h-screen overflow-y-auto ${
+        className={`scrollbar-hide fixed h-full min-h-screen overflow-y-auto ${
           isCollapsed ? "w-sideBarWidthCollapsed" : "w-sideBarWidth"
         } ${isOpen ? "max-lg:translate-x-0" : "max-lg:-translate-x-full"} transition-width z-30 mr-1 flex flex-col gap-2 bg-gray-900 p-3 pt-5 text-white duration-300 max-lg:absolute`}
       >
