@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { toast } from "sonner";
+import { login } from "@/lib/login";
 
 const formSchema = z.object({
   email: z.string().trim().email("Адрес электронной почты введён некорректно"),
@@ -56,17 +57,7 @@ export default function LoginForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        body: JSON.stringify({
-          email: values.email,
-          password: values.password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
+      const data = await login(values.email, values.password);
       if (data.success) {
         router.push("/profile");
         form.reset();
