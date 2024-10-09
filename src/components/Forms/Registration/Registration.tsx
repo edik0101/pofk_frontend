@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -18,12 +17,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { PagesPaths } from "@/data/pages";
 import PhoneInput from "../PhoneInput/PhoneInput";
 import { transformPhoneNumber } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { login } from "@/lib/login";
+import PrivacyPolicyPopup from "@/components/PrivacyPolicy/PrivacyPolicy";
 
 const formSchema = z
   .object({
@@ -326,13 +325,7 @@ export default function Registration() {
                   />
                 </FormControl>
                 <Label className="text-base font-light">
-                  Согласен с{" "}
-                  <Link
-                    href={PagesPaths["privacy-policy"]}
-                    className="text-primary"
-                  >
-                    Политикой конфиденциальности
-                  </Link>{" "}
+                  Согласен с<PrivacyPolicyPopup />
                   персональных данных
                 </Label>
               </div>
