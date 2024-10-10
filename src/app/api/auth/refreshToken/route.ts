@@ -1,17 +1,19 @@
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const { email, password } = await req.json();
+export async function GET(req: NextRequest) {
+  const refresh_token = cookies().get("refresh_token")?.value;
+
+  if (!refresh_token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
   try {
     const params = new URLSearchParams({
       client_id: process.env.CLIENT_ID as string,
       client_secret: process.env.CLIENT_SECRET as string,
-      grant_type: "password",
-      scope: "openid offline_access",
-      username: email,
-      password: password,
+      grant_type: "refresh_token",
+      refresh_token,
     });
 
     const res = await fetch(`${process.env.URL_BACK}/connect/token`, {
@@ -23,10 +25,9 @@ export async function POST(req: Request) {
     });
 
     if (!res.ok) {
-      if (res.status === 400) {
-        throw new Error("Неверный логин или пароль" as string);
-      }
-      throw new Error("Неизвестная ошибка при логине" as string);
+      cookies().delete("access_token");
+      cookies().delete("refresh_token");
+      throw new Error("Не удалось обновить токен" as string);
     }
 
     const data = await res.json();
@@ -40,13 +41,9 @@ export async function POST(req: Request) {
       httpOnly: true,
     });
 
-    return NextResponse.json({
-      success: true,
-    });
-  } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: error instanceof Error ? error.message : "",
-    });
+    const nextUrl = req.nextUrl.searchParams.get("next") || "/";
+    return NextResponse.redirect(new URL(nextUrl, req.url));
+  } catch {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 }

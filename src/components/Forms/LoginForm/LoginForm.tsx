@@ -59,7 +59,7 @@ export default function LoginForm() {
     try {
       const data = await login(values.email, values.password);
       if (data.success) {
-        router.push("/profile");
+        router.push("/settings/profile");
         form.reset();
       } else {
         console.error("Login failed: ", data.message);
