@@ -32,6 +32,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (token && refreshToken) {
+    req.headers.set("authorization", `Bearer ${token}`);
     return res;
   }
 

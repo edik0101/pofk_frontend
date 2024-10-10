@@ -1,54 +1,20 @@
-import { PlusIcon, X } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import Heading from "@/components/Heading/Heading";
 import SimpleTable from "@/components/Tables/SimpleTable/SimpleTable";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
-const changeRoleBtn = (
-  <Button
-    variant="outline"
-    className="h-12 rounded-3xl border border-primary bg-transparent text-base text-primary"
-  >
-    Поменять роль
-  </Button>
-);
-const closeAccessBtn = (
-  <Button
-    variant="outline"
-    className="h-12 rounded-3xl border-none bg-transparent text-base text-slate-500 shadow-none"
-  >
-    <X size={10} strokeWidth={2} className="mr-1" />
-    <span>Закрыть доступ</span>
-  </Button>
-);
-
-const EmployeeList = [
-  {
-    name: "Александр В.",
-    email: "example1@mail.ru",
-    role: "Операционист",
-    changeRoleBtn: changeRoleBtn,
-    closeAccessBtn: closeAccessBtn,
-  },
-  {
-    name: "Дарья Ф.",
-    email: "example1@mail.ru",
-    role: "Финансит",
-    changeRoleBtn: changeRoleBtn,
-    closeAccessBtn: closeAccessBtn,
-  },
-  {
-    name: "Андрей М.",
-    email: "example1@mail.ru",
-    role: "Ассистент",
-    changeRoleBtn: changeRoleBtn,
-    closeAccessBtn: closeAccessBtn,
-  },
-];
+import { FetchedRole, FetchedUser } from "@/types/types";
+import { getRoles, getUsers } from "@/lib/users";
+import ChangeRoleBtn from "./Buttons/ChangeRoleBtn";
+import ChangeAccessBtn from "./Buttons/ChangeAccessBtn";
 
 const EmployeeListColumns = ["Имя", "Почта", "Роль", "", ""];
 
 export default async function Users() {
+  const users: FetchedUser[] | null = (await getUsers()) || null;
+  const roles: FetchedRole[] | null = (await getRoles()) || null;
+  const rolesNames = roles?.map((role) => role.Name);
+
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-4">
@@ -61,7 +27,28 @@ export default async function Users() {
         </Button>
       </div>
       <Card className="mt-5 rounded-3xl bg-white p-4">
-        <SimpleTable data={EmployeeList} columnsHeaders={EmployeeListColumns} />
+        {users && (
+          <SimpleTable
+            data={users.map((user) => ({
+              name: user.FirstName + " " + user.LastName,
+              email: user.Email,
+              role: user.Roles.join(" "),
+              changeRoleBtn: (
+                <ChangeRoleBtn
+                  rolesNames={rolesNames || [""]}
+                  userEmail={user.Email}
+                />
+              ),
+              closeAccessBtn: (
+                <ChangeAccessBtn
+                  isActive={user.IsActive}
+                  userEmail={user.Email}
+                />
+              ),
+            }))}
+            columnsHeaders={EmployeeListColumns}
+          />
+        )}
       </Card>
     </div>
   );

@@ -1,11 +1,19 @@
-type Roles = "Administrator";
+export interface User extends FetchedUser {
+  PhoneNumber: number | null;
+  CompanyName: string;
+}
 
-export interface User {
+export interface FetchedUser {
   FirstName: string;
   LastName: string;
-  PhoneNumber: number | null;
   Email: string;
-  CompanyName: string;
-  Roles: Roles[];
+  Roles: string[];
   IsActive: boolean;
+}
+
+export interface FetchedRole {
+  Id: string;
+  Name: string;
+  NormalizedName: string;
+  ConcurrencyStamp: null;
 }
